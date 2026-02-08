@@ -1,0 +1,518 @@
+```html
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en" dir="<$BlogLanguageDirection$>">
+<head>
+  <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+  <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Will You Be My Valentine?</title>
+
+  <style type="text/css">
+    /* ====== Base ====== */
+    html, body { height: 100%; }
+    body {
+      margin: 0;
+      padding: 0;
+      font-family: Arial, Helvetica, sans-serif;
+      color: #1f1f1f;
+      background: #e9f4ff; /* light-blueish */
+      overflow-x: hidden;
+    }
+
+    /* Soft background glow */
+    .bg-glow {
+      position: fixed;
+      top: -120px;
+      left: 50%;
+      width: 900px;
+      height: 900px;
+      margin-left: -450px;
+      border-radius: 50%;
+      background: rgba(255, 105, 180, 0.12);
+      filter: blur(30px);
+      z-index: 0;
+      pointer-events: none;
+    }
+
+    .wrap {
+      position: relative;
+      z-index: 1;
+      min-height: 100%;
+      display: block;
+      padding: 28px 16px;
+      box-sizing: border-box;
+    }
+
+    /* Center card */
+    .card {
+      max-width: 720px;
+      margin: 0 auto;
+      background: #ffffff;
+      border: 1px solid rgba(0,0,0,0.06);
+      border-radius: 18px;
+      box-shadow: 0 10px 35px rgba(0,0,0,0.08);
+      padding: 22px 18px 20px 18px;
+      box-sizing: border-box;
+    }
+
+    .badge {
+      display: inline-block;
+      font-size: 12px;
+      letter-spacing: 0.5px;
+      padding: 7px 10px;
+      border-radius: 999px;
+      background: rgba(255, 105, 180, 0.10);
+      color: #b01863;
+      border: 1px solid rgba(176, 24, 99, 0.18);
+    }
+
+    h1 {
+      margin: 14px 0 8px 0;
+      font-size: 32px;
+      line-height: 1.15;
+      color: #14213d;
+    }
+
+    p {
+      margin: 10px 0;
+      font-size: 16px;
+      line-height: 1.6;
+      color: #2a2a2a;
+    }
+
+    /* Big question */
+    .question {
+      margin: 18px 0 8px 0;
+      padding: 16px 14px;
+      border-radius: 14px;
+      background: rgba(0, 102, 204, 0.06);
+      border: 1px solid rgba(0, 102, 204, 0.12);
+    }
+
+    .question .qline {
+      font-size: 26px;
+      line-height: 1.25;
+      margin: 0;
+      color: #0b2545;
+      font-weight: bold;
+    }
+
+    /* Pop line area */
+    .popline {
+      margin-top: 10px;
+      min-height: 54px;
+      padding: 12px 12px;
+      border-radius: 12px;
+      background: rgba(255, 105, 180, 0.08);
+      border: 1px solid rgba(255, 105, 180, 0.15);
+      position: relative;
+      overflow: hidden;
+    }
+    .popline .text {
+      font-size: 18px;
+      line-height: 1.45;
+      margin: 0;
+      color: #3a0f2a;
+      opacity: 0;
+      transform: translateY(6px);
+      transition: opacity 250ms ease, transform 250ms ease;
+      word-wrap: break-word;
+    }
+    .popline .text.show {
+      opacity: 1;
+      transform: translateY(0);
+    }
+
+    /* Static hint below lines */
+    .static-plea {
+      margin: 10px 0 0 0;
+      font-size: 14px;
+      color: #0b2545;
+      opacity: 0.8;
+      text-align: left;
+    }
+
+    /* Buttons */
+    .actions {
+      margin-top: 18px;
+      display: flex;
+      gap: 12px;
+      flex-wrap: wrap;
+      align-items: center;
+    }
+
+    .btn {
+      appearance: none;
+      border: none;
+      cursor: pointer;
+      border-radius: 999px;
+      padding: 14px 18px;
+      font-size: 16px;
+      line-height: 1;
+      font-weight: bold;
+      transition: transform 160ms ease, box-shadow 160ms ease, background 160ms ease, opacity 160ms ease;
+      user-select: none;
+    }
+
+    .btn:active { transform: translateY(1px); }
+
+    .btn-yes {
+      background: #ff4da6;
+      color: #fff;
+      box-shadow: 0 10px 20px rgba(255, 77, 166, 0.25);
+      transform-origin: center;
+    }
+
+    .btn-no {
+      background: #0b2545;
+      color: #fff;
+      box-shadow: 0 10px 20px rgba(11, 37, 69, 0.18);
+      opacity: 0.95;
+    }
+
+    .note {
+      margin-top: 12px;
+      font-size: 13px;
+      color: rgba(0,0,0,0.55);
+    }
+
+    /* Success screen */
+    .success {
+      margin-top: 16px;
+      display: none;
+      padding: 16px 14px;
+      border-radius: 14px;
+      border: 1px solid rgba(0, 150, 90, 0.18);
+      background: rgba(0, 150, 90, 0.06);
+      overflow: hidden;
+      position: relative;
+    }
+
+    .success h2 {
+      margin: 0 0 8px 0;
+      font-size: 22px;
+      color: #064b2f;
+    }
+
+    .success p {
+      margin: 0;
+      color: #064b2f;
+      font-size: 16px;
+    }
+
+    /* Flower (simple CSS art) */
+    .flower-wrap {
+      margin-top: 14px;
+      display: flex;
+      justify-content: center;
+    }
+
+    .flower {
+      width: 130px;
+      height: 130px;
+      position: relative;
+      transform: scale(0.2);
+      opacity: 0;
+      transition: transform 600ms ease, opacity 600ms ease;
+    }
+    .flower.bloom {
+      transform: scale(1);
+      opacity: 1;
+    }
+    .petal {
+      position: absolute;
+      width: 52px;
+      height: 80px;
+      background: rgba(255, 77, 166, 0.92);
+      border-radius: 52px 52px 52px 52px;
+      top: 20px;
+      left: 39px;
+      transform-origin: 26px 70px;
+      box-shadow: inset 0 -10px 18px rgba(0,0,0,0.12);
+    }
+    .petal.p1 { transform: rotate(0deg); }
+    .petal.p2 { transform: rotate(60deg); }
+    .petal.p3 { transform: rotate(120deg); }
+    .petal.p4 { transform: rotate(180deg); }
+    .petal.p5 { transform: rotate(240deg); }
+    .petal.p6 { transform: rotate(300deg); }
+
+    .center {
+      position: absolute;
+      width: 40px;
+      height: 40px;
+      background: #ffd166;
+      border-radius: 50%;
+      top: 45px;
+      left: 45px;
+      box-shadow: 0 8px 14px rgba(0,0,0,0.12), inset 0 -6px 10px rgba(0,0,0,0.10);
+    }
+
+    .stem {
+      position: absolute;
+      width: 10px;
+      height: 90px;
+      background: #2ecc71;
+      left: 60px;
+      top: 95px;
+      border-radius: 8px;
+      box-shadow: inset 0 -8px 12px rgba(0,0,0,0.10);
+    }
+    .leaf {
+      position: absolute;
+      width: 44px;
+      height: 24px;
+      background: rgba(46, 204, 113, 0.95);
+      border-radius: 44px 44px 44px 44px;
+      top: 132px;
+      left: 20px;
+      transform: rotate(-18deg);
+      box-shadow: inset 0 -6px 10px rgba(0,0,0,0.10);
+    }
+    .leaf.r {
+      left: 66px;
+      top: 132px;
+      transform: rotate(18deg);
+    }
+
+    /* Floating hearts */
+    .heart {
+      position: fixed;
+      bottom: -20px;
+      font-size: 18px;
+      opacity: 0.95;
+      animation: floatUp 3.6s linear forwards;
+      z-index: 2;
+      pointer-events: none;
+      filter: drop-shadow(0 6px 6px rgba(0,0,0,0.12));
+    }
+    @keyframes floatUp {
+      0%   { transform: translateY(0) translateX(0) scale(1); opacity: 0.0; }
+      10%  { opacity: 1; }
+      100% { transform: translateY(-110vh) translateX(40px) scale(1.35); opacity: 0; }
+    }
+
+    /* Small screens */
+    @media (max-width: 520px) {
+      h1 { font-size: 28px; }
+      .question .qline { font-size: 22px; }
+      .popline .text { font-size: 16px; }
+      .btn { width: 100%; }
+      .actions { gap: 10px; }
+    }
+  </style>
+</head>
+
+<body>
+  <div class="bg-glow"></div>
+
+  <div class="wrap">
+    <div class="card" id="card">
+      <span class="badge">💌 Valentine Mode</span>
+      <h1>Hey baby ❤️</h1>
+      <p>
+        I made this just for you. No long talk, no stress.
+        Just one simple question from my heart to yours.
+      </p>
+
+      <div class="question">
+        <p class="qline">Will you be my Valentine? 💘</p>
+      </div>
+
+      <div class="popline" aria-live="polite">
+        <p class="text" id="popText"></p>
+      </div>
+      <p class="static-plea">Please say yes 🥺💗</p>
+
+      <div class="actions">
+        <button class="btn btn-yes" id="yesBtn" type="button">Yes 💖</button>
+        <button class="btn btn-no" id="noBtn" type="button">No 🙈</button>
+      </div>
+
+      <div class="success" id="successBox">
+        <h2>Yayyy 💐❤️</h2>
+        <p id="successMsg">
+          You just made my whole day. I’m yours, and I’m so happy you chose me 😍
+        </p>
+
+        <div class="flower-wrap">
+          <div class="flower" id="flower">
+            <div class="petal p1"></div>
+            <div class="petal p2"></div>
+            <div class="petal p3"></div>
+            <div class="petal p4"></div>
+            <div class="petal p5"></div>
+            <div class="petal p6"></div>
+            <div class="center"></div>
+            <div class="stem"></div>
+            <div class="leaf"></div>
+            <div class="leaf r"></div>
+          </div>
+        </div>
+
+        <p class="note">Screenshot this and send it to me 😌💞</p>
+      </div>
+
+      <p class="note">
+        Tip: you can edit the “Hey baby” and success message to her name to make it even sweeter.
+      </p>
+    </div>
+  </div>
+
+  <script type="text/javascript">
+    (function () {
+      var lines = [
+        "Honestly baby are you sure I swear my favorite place is right beside you 💕",
+        "You know even if you click no I swear you’re still my whole world 🥺❤️",
+        "I swear darling you make every ordinary day feel worth celebrating ✨",
+        "Baby you’re not just my crush you’re my peace my person 💗",
+        "I swear I still get butterflies when I think about you every single time 🦋",
+        "Honestly you’re the best decision my heart ever made ❤️",
+        "Darling I swear if love had a face it would look like you 😍",
+        "Baby I don’t just like you I feel safe with you 🤍",
+        "Honestly you’re my favorite notification my favorite call my favorite everything 💖",
+        "I swear being loved by you is my favorite blessing ❤️",
+        "Baby I don’t need a perfect day just one that has you in it ☀️",
+        "Darling you’re the soft place my heart keeps running back to 💓",
+        "I swear I’m not asking for forever just one Valentine with you 🥹🌹",
+        "Honestly you’re the reason good morning and good night texts exist 💬",
+        "Baby you look cute even when you pretend to be serious 😌",
+        "Pinky swear I’d choose you in every universe 🤞💫",
+        "Honestly my heart already saved a spot for you ❤️",
+        "Darling you’re my calm my chaos and my favorite chapter 📖",
+        "I swear everything feels lighter just because you’re there ☁️",
+        "Baby you’re beautiful kind smart and so special ✨",
+        "Please believe me I don’t want anyone else it’s always you 💘",
+        "Darling you’re my comfort zone and my biggest adventure 🌍❤️",
+        "I swear your laugh does things to my heart 😄💓",
+        "Honestly your happiness means everything to me 🥰",
+        "Baby seeing your name already makes my day better 💖",
+        "I swear you make me want to be better just for you 🌱",
+        "Honestly I still can’t believe I get to love someone like you 🥹",
+        "Baby if you were a song I’d play you forever 🎶💗",
+        "Darling you don’t enter rooms you light them up ✨",
+        "I swear my favorite view will always be you ❤️",
+        "Honestly you’re where my heart feels safe 🤍",
+        "Baby you’re proof that prayers get answered 🙏💖",
+        "I swear loving you feels easy and real 💕",
+        "Darling your smile is my favorite thing in the world 😊",
+        "Honestly everything about you feels like art 🎨❤️",
+        "Baby you’re my favorite what if that came true ✨",
+        "I swear my day is always better when I talk to you 💬",
+        "Darling being close to you feels like home 🏡❤️",
+        "Honestly loving you is my favorite habit 💖",
+        "Baby you’re not too much you’re exactly enough 🤍",
+        "I swear I love how we’re silly serious and weird together 😄",
+        "Darling you’re the plot twist I didn’t know I needed 💘",
+        "Honestly I could write about you forever 💖",
+        "Baby you’re my safe place in a loud world 🤍",
+        "I swear I’m so proud of you always 🌸",
+        "Honestly you make me feel chosen 💞",
+        "Baby your voice is my favorite sound ❤️",
+        "I swear I don’t want perfect I just want you 🌹",
+        "Baby my heart is waiting for you to say yes 🥺💖",
+        "Darling will you be my Valentine 💐❤️"
+      ];
+
+      var popText = document.getElementById("popText");
+      var yesBtn = document.getElementById("yesBtn");
+      var noBtn = document.getElementById("noBtn");
+      var successBox = document.getElementById("successBox");
+      var flower = document.getElementById("flower");
+
+      var noClicks = 0;
+      var lineIndex = 0;
+
+      // Start with a gentle first line
+      showLine(lines[0]);
+
+      function showLine(txt) {
+        popText.className = "text"; // reset animation class
+        popText.innerHTML = escapeHtml(txt);
+        // small async to allow transition to replay
+        setTimeout(function () {
+          popText.className = "text show";
+        }, 20);
+      }
+
+      function escapeHtml(s) {
+        return String(s)
+          .replace(/&/g, "&amp;")
+          .replace(/</g, "&lt;")
+          .replace(/>/g, "&gt;")
+          .replace(/"/g, "&quot;")
+          .replace(/'/g, "&#039;");
+      }
+
+      function growYesButton() {
+        // Smoothly scale up based on No clicks
+        var scale = 1 + Math.min(noClicks * 0.10, 1.6); // cap growth
+        yesBtn.style.transform = "scale(" + scale + ")";
+        yesBtn.style.boxShadow = "0 12px 28px rgba(255, 77, 166, 0.30)";
+      }
+
+      function makeNoSmaller() {
+        var opacity = Math.max(0.35, 0.95 - noClicks * 0.08);
+        noBtn.style.opacity = String(opacity);
+      }
+
+      function spawnHeart() {
+        var hearts = ["💖","💗","💓","💘","💕","❤️"];
+        var h = document.createElement("div");
+        h.className = "heart";
+        h.innerHTML = hearts[Math.floor(Math.random() * hearts.length)];
+        h.style.left = String(Math.floor(Math.random() * 92) + 4) + "vw";
+        h.style.fontSize = String(14 + Math.floor(Math.random() * 18)) + "px";
+        document.body.appendChild(h);
+        setTimeout(function () {
+          if (h && h.parentNode) h.parentNode.removeChild(h);
+        }, 3800);
+      }
+
+      function confettiHeartsBurst() {
+        // quick burst
+        var i;
+        for (i = 0; i < 16; i++) {
+          setTimeout(spawnHeart, i * 80);
+        }
+      }
+
+      noBtn.onclick = function () {
+        noClicks += 1;
+
+        // Next line
+        lineIndex = (lineIndex + 1) % lines.length;
+        showLine(lines[lineIndex]);
+
+        // Grow yes and soften no
+        growYesButton();
+        makeNoSmaller();
+
+        // little hearts sometimes
+        if (noClicks % 2 === 0) spawnHeart();
+      };
+
+      yesBtn.onclick = function () {
+        successBox.style.display = "block";
+        flower.className = "flower bloom";
+        confettiHeartsBurst();
+
+        // disable buttons
+        yesBtn.disabled = true;
+        noBtn.disabled = true;
+        yesBtn.style.opacity = "0.9";
+        noBtn.style.opacity = "0.4";
+
+        // show a final line
+        showLine("Yesss baby I swear you just made me the happiest person right now 😍💐");
+      };
+
+      // soft floating hearts in background
+      setInterval(function () {
+        if (!yesBtn.disabled) spawnHeart();
+      }, 2200);
+    })();
+  </script>
+</body>
+</html>
+```
